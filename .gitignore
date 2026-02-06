@@ -30,3 +30,6 @@ logs/
 
 # Docker
 docker-compose.override.yml
+
+# Apps (independent repos, clone separately)
+apps/

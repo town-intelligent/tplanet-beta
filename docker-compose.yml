@@ -15,20 +15,20 @@ services:
   # Frontend - React + Vite
   frontend:
     build:
-      context: ../tplanet-AI
+      context: ./apps/tplanet-AI
       dockerfile: Dockerfile
     volumes:
-      - ../tplanet-AI:/app
+      - ./apps/tplanet-AI:/app
     networks:
       - tplanet-net
 
   # Backend - Django
   backend:
     build:
-      context: ../tplanet-daemon
+      context: ./apps/tplanet-daemon
       dockerfile: Dockerfile
     volumes:
-      - ../tplanet-daemon:/server
+      - ./apps/tplanet-daemon:/server
     depends_on:
       - db
     networks:
@@ -49,10 +49,10 @@ services:
   # LLMTwins - AI RAG & Agent Service
   llmtwins:
     build:
-      context: ../LLMTwins
+      context: ./apps/LLMTwins
       dockerfile: Dockerfile
     volumes:
-      - ../LLMTwins:/app
+      - ./apps/LLMTwins:/app
     networks:
       - tplanet-net
 

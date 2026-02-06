@@ -5,38 +5,39 @@ TPlanet 部署專用 Repo - Microservices 架構
 ## 目錄結構
 
 ```
-town-intelligent/
-├── tplanet-AI/           # Frontend repo (獨立)
-├── tplanet-daemon/       # Backend repo (獨立)
-├── LLMTwins/             # AI Service repo (獨立)
+tplanet-deploy/
+├── apps/                         # 應用程式 (獨立 repos)
+│   ├── tplanet-AI/               # Frontend repo
+│   ├── tplanet-daemon/           # Backend repo
+│   └── LLMTwins/                 # AI Service repo
 │
-└── tplanet-deploy/       # 部署專用 (本 repo)
-    ├── docker-compose.yml
-    ├── docker-compose.beta.yml
-    ├── docker-compose.stable.yml
-    ├── docker-compose.multi-tenant.yml
-    ├── nginx/
-    └── packages/
-        └── multi-tenant/  # 共用套件
+├── docker-compose.yml            # Base compose
+├── docker-compose.beta.yml       # Beta 環境
+├── docker-compose.stable.yml     # Stable 環境
+├── docker-compose.multi-tenant.yml
+├── setup.sh                      # 自動 clone apps
+├── nginx/
+└── packages/
+    └── multi-tenant/             # 共用套件
 ```
 
-## 前置作業
-
-確保 sibling 目錄有以下 repos：
+## 快速開始
 
 ```bash
-cd /path/to/town-intelligent
-git clone git@github.com:town-intelligent-beta/tplanet-AI.git
-git clone git@github.com:town-intelligent/tplanet-daemon.git
-git clone git@github.com:towNingtek/LLMTwins.git
+# 1. Clone deploy repo
 git clone git@github.com:town-intelligent/tplanet-deploy.git
+cd tplanet-deploy
+
+# 2. 執行 setup.sh 自動 clone 所有 apps
+./setup.sh
+
+# 3. 啟動服務
+docker compose -f docker-compose.yml -f docker-compose.beta.yml up -d
 ```
 
 ## 部署指令
 
 ```bash
-cd tplanet-deploy
-
 # Beta 環境
 docker compose -f docker-compose.yml -f docker-compose.beta.yml up -d
 
@@ -45,6 +46,24 @@ docker compose -f docker-compose.yml -f docker-compose.stable.yml up -d
 
 # Multi-tenant 環境
 docker compose -f docker-compose.yml -f docker-compose.multi-tenant.yml up -d
+```
+
+## 開發流程
+
+各 app 在 `apps/` 內保持獨立的 git repo：
+
+```bash
+# 開發 frontend
+cd apps/tplanet-AI
+git pull origin main
+# ... 修改 ...
+git add . && git commit && git push
+
+# 開發 backend
+cd apps/tplanet-daemon
+git pull origin main
+# ... 修改 ...
+git add . && git commit && git push
 ```
 
 ## Multi-tenant 測試網址
@@ -81,7 +100,7 @@ docker compose -f docker-compose.yml -f docker-compose.multi-tenant.yml up -d
 
 ## 新增 Tenant
 
-1. 編輯 `../tplanet-daemon/backend/config/tenants.yml`
+1. 編輯 `apps/tplanet-daemon/backend/config/tenants.yml`
 2. 建立對應的資料庫
 3. 設定 DNS + Nginx (`nginx/` 目錄)
 4. 重啟服務
