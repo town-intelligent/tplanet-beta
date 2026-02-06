@@ -29,6 +29,7 @@ clone_if_missing() {
 clone_if_missing "tplanet-AI" "git@github.com:town-intelligent-beta/tplanet-AI.git"
 clone_if_missing "tplanet-daemon" "git@github.com:town-intelligent/tplanet-daemon.git"
 clone_if_missing "LLMTwins" "git@github.com:towNingtek/LLMTwins.git"
+clone_if_missing "ollama-gateway" "git@github.com:towNingtek/ollama-gateway.git"
 
 echo ""
 echo "=== Setup Complete ==="

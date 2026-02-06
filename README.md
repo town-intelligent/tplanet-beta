@@ -9,7 +9,8 @@ tplanet-deploy/
 ├── apps/                         # 應用程式 (獨立 repos)
 │   ├── tplanet-AI/               # Frontend repo
 │   ├── tplanet-daemon/           # Backend repo
-│   └── LLMTwins/                 # AI Service repo
+│   ├── LLMTwins/                 # AI Service repo
+│   └── ollama-gateway/           # LLM Gateway repo
 │
 ├── docker-compose.yml            # Base compose
 ├── docker-compose.beta.yml       # Beta 環境
@@ -90,11 +91,20 @@ git add . && git commit && git push
 │  (React/Vite)   │ │    (Django)     │ │   (FastAPI)     │
 └─────────────────┘ └────────┬────────┘ └────────┬────────┘
                              │                   │
-                    ┌────────┴────────┐          │
-                    │   Databases     │          ▼
-                    │  (per tenant)   │   ┌─────────────┐
-                    └─────────────────┘   │  LLMTwins   │
-                                          │  (RAG/AI)   │
+                    ┌────────┴────────┐          ▼
+                    │   Databases     │   ┌─────────────┐
+                    │  (per tenant)   │   │  LLMTwins   │
+                    └─────────────────┘   │  (RAG/AI)   │
+                                          └──────┬──────┘
+                                                 │
+                                          ┌──────▼──────┐
+                                          │   Ollama    │
+                                          │   Gateway   │
+                                          └──────┬──────┘
+                                                 │
+                                          ┌──────▼──────┐
+                                          │   Ollama    │
+                                          │    (LLM)    │
                                           └─────────────┘
 ```
 
