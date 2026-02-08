@@ -13,6 +13,9 @@ services:
 
   backend:
     container_name: tplanet-backend-multi-tenant
+    build:
+      context: ./apps/tplanet-daemon
+      dockerfile: Dockerfile.multi-tenant
     command: sh -c "cd /server/backend && python manage.py migrate --noinput && gunicorn backend.wsgi:application --bind 0.0.0.0:5567"
     ports:
       - "5580:5567"
