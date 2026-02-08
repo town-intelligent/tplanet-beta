@@ -4,21 +4,21 @@
 services:
   frontend:
     container_name: tplanet-frontend-multi-tenant
-    command: npm run dev
+    command: sh -c "npm run build && npm run preview"
     ports:
-      - "6176:5176"
+      - "6176:5170"
     environment:
       - VITE_HOST_URL_TPLANET=https://multi-tenant.4impact.cc
       - VITE_API_LLMTWINS=https://multi-tenant.4impact.cc
 
   backend:
     container_name: tplanet-backend-multi-tenant
-    command: python backend/manage.py runserver 0.0.0.0:5567
+    command: gunicorn backend.wsgi:application --bind 0.0.0.0:5567
     ports:
       - "5580:5567"
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings_multitenant
-      - DEBUG=True
+      - DEBUG=False
       - DB_NAME=${DB_NAME:-tplanet}
       - DB_HOST=${DB_HOST:-db}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
