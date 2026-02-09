@@ -25,7 +25,7 @@ server {
 
     set $tenant_id "default";
 
-    # Backend API
+    # Backend API — direct path matching
     location ~ ^/(accounts|projects|llm|tasks|NFT|portal|mockup|news|dashboard|weight|admin|tenant)/ {
         proxy_pass http://localhost:5580;
         proxy_http_version 1.1;
@@ -36,7 +36,21 @@ server {
         proxy_set_header X-Tenant-ID $tenant_id;
     }
 
+    # Backend API — /api/ prefix (frontend uses /api/tenant/config etc.)
+    # Strips /api/ prefix: /api/tenant/config -> /tenant/config
+    location ~ ^/api/(accounts|projects|llm|tasks|NFT|portal|mockup|news|dashboard|weight|admin|tenant)/ {
+        rewrite ^/api/(.*)$ /$1 break;
+        proxy_pass http://localhost:5580;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Tenant-ID $tenant_id;
+    }
+
     # LLMTwins API -> Wrapper (multi-tenant session isolation)
+    # Handles /api/* paths that don't match backend routes above
     location /api/ {
         proxy_pass http://localhost:8004;
         proxy_http_version 1.1;
@@ -45,12 +59,12 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Tenant-ID $tenant_id;
-        
+
         # Long timeout for AI responses
         proxy_read_timeout 600s;
         proxy_send_timeout 600s;
         proxy_connect_timeout 60s;
-        
+
         # SSE/streaming support
         proxy_buffering off;
         proxy_request_buffering off;
@@ -91,7 +105,7 @@ server {
 
     set $tenant_id "nantou-gov";
 
-    # Backend API
+    # Backend API — direct path matching
     location ~ ^/(accounts|projects|llm|tasks|NFT|portal|mockup|news|dashboard|weight|admin|tenant)/ {
         proxy_pass http://localhost:5580;
         proxy_http_version 1.1;
@@ -102,7 +116,21 @@ server {
         proxy_set_header X-Tenant-ID $tenant_id;
     }
 
+    # Backend API — /api/ prefix (frontend uses /api/tenant/config etc.)
+    # Strips /api/ prefix: /api/tenant/config -> /tenant/config
+    location ~ ^/api/(accounts|projects|llm|tasks|NFT|portal|mockup|news|dashboard|weight|admin|tenant)/ {
+        rewrite ^/api/(.*)$ /$1 break;
+        proxy_pass http://localhost:5580;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Tenant-ID $tenant_id;
+    }
+
     # LLMTwins API -> Wrapper (multi-tenant session isolation)
+    # Handles /api/* paths that don't match backend routes above
     location /api/ {
         proxy_pass http://localhost:8004;
         proxy_http_version 1.1;
@@ -111,12 +139,12 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Tenant-ID $tenant_id;
-        
+
         # Long timeout for AI responses
         proxy_read_timeout 600s;
         proxy_send_timeout 600s;
         proxy_connect_timeout 60s;
-        
+
         # SSE/streaming support
         proxy_buffering off;
         proxy_request_buffering off;
