@@ -18,7 +18,7 @@ services:
       - "5580:5567"
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings_multitenant
-      - DEBUG=True
+      - DEBUG=${DEBUG:-False}
       - DB_NAME=${DB_NAME:-tplanet}
       - DB_HOST=${DB_HOST:-db}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
