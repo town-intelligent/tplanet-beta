@@ -1,23 +1,5 @@
 import { apiPost, apiPostJson, apiGet } from './api';
 
-export async function getGroup(email) {
-  const formdata = new FormData();
-  formdata.append("email", email);
-
-  try {
-    const response = await apiPost('/accounts/get_group', formdata);
-
-    if (response.success && response.data?.group) {
-      localStorage.setItem("group", response.data.group);
-      return response.data.group;
-    }
-    return null;
-  } catch (error) {
-    console.error("There was a problem with the fetch operation:", error);
-    return null;
-  }
-}
-
 export async function logout() {
   const formdata = new FormData();
   formdata.append("token", localStorage.getItem("jwt"));

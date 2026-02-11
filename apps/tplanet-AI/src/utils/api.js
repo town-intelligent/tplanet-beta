@@ -49,8 +49,6 @@ export function normalizeResponse(rawResponse) {
       data = rawResponse.content;
     } else if (rawResponse.token !== undefined) {
       data = { token: rawResponse.token, username: rawResponse.username };
-    } else if (rawResponse.group !== undefined) {
-      data = { group: rawResponse.group };
     } else if (rawResponse.accounts !== undefined) {
       data = { accounts: rawResponse.accounts };
     } else if (rawResponse.user_list !== undefined) {
@@ -78,15 +76,6 @@ export function normalizeResponse(rawResponse) {
     return {
       success: true,
       data: { token: rawResponse.token, username: rawResponse.username },
-      message: null,
-      error: null,
-    };
-  }
-
-  if (rawResponse.group !== undefined) {
-    return {
-      success: true,
-      data: { group: rawResponse.group },
       message: null,
       error: null,
     };

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Captcha from "../utils/Captcha";
 import { useNavigate } from "react-router-dom";
-import { getGroup } from "../utils/Accounts";
 import { useAuth } from "../utils/ProtectRoute";
 import { useTranslation } from "react-i18next";
 import { apiPost } from "../utils/api";
@@ -56,7 +55,6 @@ export default function SignIn() {
         localStorage.setItem("jwt", result.token);
         localStorage.setItem("username", result.username);
         localStorage.setItem("email", email);
-        await getGroup(email);
         setIsAuthenticated(true);
 
         // 統一導向 /backend，由 BackendRedirect 根據權限決定去向
