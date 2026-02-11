@@ -205,10 +205,12 @@ const ProjectList = ({ filteredProjects }) => {
                           <p className="mt-2 mb-0">{t("cmsagent.update_project")}</p>
                         </div>
                       </div>
-                      <Link
-                        to={`/backend/cms_plan_info/${selectedProject?.uuid}`}
-                        className="stretched-link"
-                      ></Link>
+                      {selectedProject?.uuid && (
+                        <Link
+                          to={`/backend/cms_plan_info/${selectedProject.uuid}`}
+                          className="stretched-link"
+                        ></Link>
+                      )}
                     </div>
                   </div>
                   {/* <div className="col-2">
@@ -247,10 +249,12 @@ const ProjectList = ({ filteredProjects }) => {
                           <p className="mt-2 mb-0">SROI</p>
                         </div>
                       </div>
-                      <Link
-                        to={`/backend/cms_sroi/${selectedProject?.uuid}`}
-                        className="stretched-link"
-                      ></Link>
+                      {selectedProject?.uuid && (
+                        <Link
+                          to={`/backend/cms_sroi/${selectedProject.uuid}`}
+                          className="stretched-link"
+                        ></Link>
+                      )}
                     </div>
                   </div>
                   <div className="col-2">
@@ -296,10 +300,12 @@ const ProjectList = ({ filteredProjects }) => {
                           <p className="mt-2 mb-0">{t("cmsagent.update_project")}</p>
                         </div>
                       </div>
-                      <Link
-                        to={`/backend/cms_plan_info/${selectedProject?.uuid}`}
-                        className="stretched-link"
-                      ></Link>
+                      {selectedProject?.uuid && (
+                        <Link
+                          to={`/backend/cms_plan_info/${selectedProject.uuid}`}
+                          className="stretched-link"
+                        ></Link>
+                      )}
                     </div>
                   </div>
                   {/* <div className="col-6 mt-4">
@@ -338,10 +344,12 @@ const ProjectList = ({ filteredProjects }) => {
                           <p className="mt-2 mb-0">SROI</p>
                         </div>
                       </div>
-                      <Link
-                        to={`/backend/cms_sroi/${selectedProject?.uuid}`}
-                        className="stretched-link"
-                      ></Link>
+                      {selectedProject?.uuid && (
+                        <Link
+                          to={`/backend/cms_sroi/${selectedProject.uuid}`}
+                          className="stretched-link"
+                        ></Link>
+                      )}
                     </div>
                   </div>
                   <div className="col-6 mt-4">

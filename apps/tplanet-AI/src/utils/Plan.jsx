@@ -149,7 +149,8 @@ export async function plan_submit(formdata, uuid = null) {
     }
 
     const data = await response.json();
-    return data;
+    // API 回傳格式: {success: true, data: {...}} 或直接 {...}
+    return data?.data || data;
   } catch (error) {
     console.error("Error:", error);
     return {};

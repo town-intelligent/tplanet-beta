@@ -40,7 +40,7 @@ export default function InputBar({
   };
 
   return (
-    <div className="border-t bg-white p-4">
+    <div className="bg-white p-4">
       {/* 🔥 顯示禁用訊息 */}
       {disabled && disabledMessage && (
         <div className="mb-2 text-sm text-gray-500 text-center">

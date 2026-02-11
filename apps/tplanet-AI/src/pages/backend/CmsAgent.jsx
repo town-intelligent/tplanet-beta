@@ -94,8 +94,11 @@ export default function CmsAgent() {
     const form = new FormData();
     const obj_project = await plan_submit(form);
 
-    if (obj_project) {
+    if (obj_project?.uuid) {
       navigate(`/backend/cms_plan_info/${obj_project.uuid}`);
+    } else {
+      console.error("[CmsAgent] 新增專案失敗：未取得 uuid", obj_project);
+      alert("新增專案失敗，請稍後再試");
     }
   };
 

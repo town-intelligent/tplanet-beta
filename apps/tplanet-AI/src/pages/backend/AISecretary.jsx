@@ -78,7 +78,7 @@ ${planDetails.philosophy ? `計劃理念：${planDetails.philosophy.replace(/<[^
   };
 
   return (
-    <div className="flex h-[calc(100vh-80px)] overflow-hidden">
+    <div className="flex h-[calc(100vh-80px)] overflow-hidden bg-white">
       <SidebarNav currentPage={currentPage} onNav={goto} />
       <div className="flex-1 h-full">
         <ModuleRenderer
