@@ -1,0 +1,36 @@
+# Local deploy override:
+# 1. Reset bind mounts (not accessible from Docker daemon in this environment)
+# 2. Use Dockerfile.multi-tenant for backend (Python 3.11 compatibility)
+# 3. Install gunicorn at runtime for production backend
+# 4. Remap db/db-nantou ports to avoid conflicts with stable env
+services:
+  frontend:
+    volumes: !reset []
+    command: sh -c "npm run build && npx vite preview --host 0.0.0.0 --port 5170"
+
+  backend:
+    build:
+      context: ./apps/tplanet-daemon
+      dockerfile: Dockerfile.multi-tenant
+    volumes:
+      - /var/www/multi-tenant-static/news:/server/backend/static/news
+    command: sh -c "pip install gunicorn && cd /server/backend && python manage.py migrate --noinput && gunicorn backend.wsgi:application --bind 0.0.0.0:5567"
+
+  db:
+    ports: !override
+      - "5439:5432"
+
+  db-nantou:
+    ports: !override
+      - "5440:5432"
+    volumes: !reset
+      - db_nantou_data:/var/lib/postgresql/data
+
+  llmtwins:
+    ports: !override
+      - "8012:8002"
+    volumes: !reset []
+
+  llmtwins-wrapper:
+    ports: !override
+      - "8014:8001"
