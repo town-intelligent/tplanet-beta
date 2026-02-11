@@ -211,7 +211,7 @@ const SiteWizard = () => {
             );
             const dnsResult = await dnsResponse.json();
             if (dnsResult.success) {
-              alert(`站台 "${formData.name}" 建立成功！\n子網域: ${formData.tenantId}.4impact.cc`);
+              alert(`站台 "${formData.name}" 建立成功！\n子網域: ${formData.tenantId}.sechome.cc`);
             } else {
               alert(`站台建立成功，但子網域建立失敗: ${dnsResult.error}`);
             }
@@ -322,7 +322,7 @@ const SiteWizard = () => {
             <div>
               <p className="font-medium text-gray-700">自動建立子網域</p>
               <p className="text-sm text-gray-500">
-                建立 <span className="font-mono bg-white px-1 rounded">{formData.tenantId || "tenant-id"}.4impact.cc</span> 並設定 Cloudflare DNS
+                建立 <span className="font-mono bg-white px-1 rounded">{formData.tenantId || "tenant-id"}.sechome.cc</span> 並設定 Cloudflare DNS
               </p>
             </div>
           </label>
@@ -446,7 +446,7 @@ const SiteWizard = () => {
           {!isEditMode && formData.createSubdomain && (
             <div className="flex justify-between py-2 border-b">
               <span className="text-gray-600">子網域</span>
-              <span className="font-medium font-mono">{formData.tenantId}.4impact.cc</span>
+              <span className="font-medium font-mono">{formData.tenantId}.sechome.cc</span>
             </div>
           )}
           <div className="flex justify-between py-2 border-b items-center">
