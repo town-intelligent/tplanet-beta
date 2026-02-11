@@ -132,7 +132,12 @@
     "email": "*Email",
     "topics": "Topics of Interest",
     "needs": "*Message",
-    "submit": "Submit"
+    "submit": "Submit",
+    "sending": "Sending...",
+    "please_verify": "Please complete the verification first",
+    "required_fields": "Please fill in name, email and message",
+    "send_success": "Your message has been sent successfully. We will contact you soon!",
+    "send_fail": "Failed to send. Please try again later"
   },
   "sdgs": {
     "1": "No Poverty",
@@ -224,6 +229,7 @@
     "news_add_success": "Added successfully",
     "news_upload_fail": "Upload failed",
     "news_add_fail": "Failed to add. Please try again later",
+    "news_file_too_large": "File too large. Images must be under 5MB, attachments under 10MB",
     "news_edit_project": "Edit Project",
     "news_add_project": "Add Project",
     "news_upload_image": "Upload Image",

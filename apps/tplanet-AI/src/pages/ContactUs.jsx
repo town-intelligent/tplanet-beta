@@ -14,6 +14,7 @@ export default function ContactUsPage() {
   const departments = useDepartments();
   const [bannerUrl, setBannerUrl] = useState(null);
   const [isVerified, setIsVerified] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedSDGs, setSelectedSDGs] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -40,11 +41,48 @@ export default function ContactUsPage() {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isVerified) {
-      alert("請先驗證");
+      alert(t("contactus.please_verify"));
+      return;
     }
-    console.log("submit");
+    if (!formData.name || !formData.email || !formData.needs) {
+      alert(t("contactus.required_fields"));
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const API_BASE = import.meta.env.VITE_HOST_URL_TPLANET;
+      const form = new FormData();
+      form.append("name", formData.name);
+      form.append("email", formData.email);
+      form.append("company", formData.company);
+      form.append("phone", formData.phone);
+      form.append("sdgs", formData.sdgs.join(", "));
+      form.append("needs", formData.needs);
+      if (hosters.length) form.append("to", hosters[0]);
+
+      const res = await fetch(`${API_BASE}/api/portal/contact_us`, {
+        method: "POST",
+        body: form,
+      });
+      const data = await res.json();
+
+      if (data.result) {
+        alert(t("contactus.send_success"));
+        setFormData({ name: "", email: "", company: "", department: "", phone: "", sdgs: [], needs: "" });
+        setSelectedSDGs([]);
+        setIsVerified(false);
+      } else {
+        alert(t("contactus.send_fail"));
+      }
+    } catch (e) {
+      console.error("contact_us error:", e);
+      alert(t("contactus.send_fail"));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -86,7 +124,7 @@ export default function ContactUsPage() {
 
       <Form className="w-5/6 mx-auto py-10">
         {/* 表單左右欄位 */}
-        <div className="flex justify-between">
+        <div className="flex justify-between" style={{ position: "relative", zIndex: 10 }}>
           {/* 左側欄位 - 從左滑入 */}
           <AnimatedSection animation="fade-left" className="col-md-5">
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -168,8 +206,8 @@ export default function ContactUsPage() {
             />
           </div>
           <div className="flex justify-center">
-            <Button variant="secondary" onClick={handleSubmit}>
-              {t("contactus.submit")}
+            <Button variant="secondary" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? t("contactus.sending") : t("contactus.submit")}
             </Button>
           </div>
         </AnimatedSection>

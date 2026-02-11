@@ -111,6 +111,9 @@ export async function news_add(form) {
     );
 
     if (!response.ok) {
+      if (response.status === 413) {
+        throw new Error("FILE_TOO_LARGE");
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -120,7 +123,7 @@ export async function news_add(form) {
     return result;
   } catch (error) {
     console.error("news_add error:", error);
-    throw error; // 保持原本的 Promise reject 行為
+    throw error;
   }
 }
 

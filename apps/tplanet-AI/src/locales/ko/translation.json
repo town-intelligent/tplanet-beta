@@ -132,7 +132,12 @@
     "email": "＊이메일",
     "topics": "관심 주제",
     "needs": "＊요청 사항",
-    "submit": "제출"
+    "submit": "제출",
+    "sending": "전송 중...",
+    "please_verify": "먼저 인증을 완료해 주세요",
+    "required_fields": "이름, 이메일, 요청 사항을 입력해 주세요",
+    "send_success": "메시지가 성공적으로 전송되었습니다. 곧 연락드리겠습니다!",
+    "send_fail": "전송에 실패했습니다. 잠시 후 다시 시도해 주세요"
   },
   "sdgs": {
     "1": "빈곤 종식",
@@ -224,6 +229,7 @@
     "news_add_success": "성공적으로 추가되었습니다",
     "news_upload_fail": "업로드 실패",
     "news_add_fail": "추가에 실패했습니다. 잠시 후 다시 시도해 주세요",
+    "news_file_too_large": "파일이 너무 큽니다. 이미지는 5MB, 첨부파일은 10MB 이하로 해주세요",
     "news_edit_project": "프로젝트 편집",
     "news_add_project": "프로젝트 추가",
     "news_upload_image": "이미지 업로드",

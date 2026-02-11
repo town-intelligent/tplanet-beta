@@ -132,7 +132,12 @@
     "email": "＊メールアドレス",
     "topics": "関心のあるテーマ",
     "needs": "＊ご要望",
-    "submit": "送信"
+    "submit": "送信",
+    "sending": "送信中...",
+    "please_verify": "先に認証を完了してください",
+    "required_fields": "氏名、メールアドレス、ご要望をご記入ください",
+    "send_success": "メッセージが正常に送信されました。近日中にご連絡いたします！",
+    "send_fail": "送信に失敗しました。しばらくしてから再度お試しください"
   },
   "sdgs": {
     "1": "貧困をなくそう",
@@ -224,6 +229,7 @@
     "news_add_success": "追加に成功しました",
     "news_upload_fail": "アップロードに失敗しました",
     "news_add_fail": "追加に失敗しました。しばらくしてから再試行してください",
+    "news_file_too_large": "ファイルが大きすぎます。画像は5MB以下、添付ファイルは10MB以下にしてください",
     "news_edit_project": "プロジェクトを編集",
     "news_add_project": "プロジェクトを追加",
     "news_upload_image": "画像をアップロード",

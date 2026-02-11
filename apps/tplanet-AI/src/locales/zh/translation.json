@@ -131,7 +131,12 @@
     "email": "*電子郵件",
     "topics": "關注議題",
     "needs": "*需求",
-    "submit": "確定送出"
+    "submit": "確定送出",
+    "sending": "寄送中...",
+    "please_verify": "請先完成驗證",
+    "required_fields": "請填寫姓名、電子郵件及需求說明",
+    "send_success": "您的訊息已成功送出，我們會盡快與您聯繫！",
+    "send_fail": "寄送失敗，請稍後再試"
   },
   "sdgs": {
     "1": "終結貧窮",
@@ -225,6 +230,7 @@
     "news_add_success": "新增成功",
     "news_upload_fail": "上傳失敗",
     "news_add_fail": "新增失敗，請稍後再試",
+    "news_file_too_large": "上傳檔案過大，單檔請勿超過 10MB，圖片請勿超過 5MB",
     "news_edit_project": "編輯專案",
     "news_add_project": "新增專案",
     "news_upload_image": "上傳照片",

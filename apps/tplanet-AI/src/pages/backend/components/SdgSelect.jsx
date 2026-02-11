@@ -84,7 +84,7 @@ export default function SdgSelect({ selectedSDGs: controlledValue, setSelectedSD
 
       {/* 下拉清單 */}
       {open && (
-        <div className="absolute z-10 mt-2 w-full bg-[#EDEDED] border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto">
+        <div className="absolute z-50 mt-2 w-full bg-[#EDEDED] border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto">
           <div className="grid grid-cols-1">
             {options.map((opt) => {
               const checked = value.includes(opt.id);
