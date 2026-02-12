@@ -257,23 +257,22 @@ def tenant_list(request: HttpRequest) -> JsonResponse:
     from django_multi_tenant.models import TenantConfig
     from django_multi_tenant.config.loader import TenantConfigLoader
 
-    # 1. DB tenants
+    # 1. DB tenants (active only shown, but track ALL IDs to suppress YAML)
+    all_db_ids = set(TenantConfig.objects.values_list("tenant_id", flat=True))
     db_tenants = TenantConfig.objects.filter(is_active=True).order_by("tenant_id")
-    db_tenant_ids = set()
     result = []
 
     for t in db_tenants:
-        db_tenant_ids.add(t.tenant_id)
         result.append(t.to_dict())
 
-    # 2. YAML tenants not yet in DB
+    # 2. YAML tenants not in DB at all (deleted DB tenants stay suppressed)
     try:
         loader = TenantConfigLoader()
         config_path = Path(__file__).resolve().parent.parent / "config" / "tenants.yml"
         loader.load_from_file(config_path)
 
         for tenant_id, yaml_cfg in loader.tenants.items():
-            if tenant_id not in db_tenant_ids:
+            if tenant_id not in all_db_ids:
                 result.append({
                     "tenantId": tenant_id,
                     "name": yaml_cfg.get("name", tenant_id),
@@ -402,6 +401,9 @@ def tenant_detail(request: HttpRequest, tenant_id: str) -> JsonResponse:
     except TenantConfig.DoesNotExist:
         return JsonResponse({"error": f"Tenant '{tenant_id}' not found"}, status=404)
 
+    if not tenant.is_active and request.method != "DELETE":
+        return JsonResponse({"error": f"Tenant '{tenant_id}' has been deleted"}, status=404)
+
     if request.method == "GET":
         return JsonResponse({"data": tenant.to_dict()})
 
@@ -474,9 +476,11 @@ def tenant_detail(request: HttpRequest, tenant_id: str) -> JsonResponse:
         if deleted_users:
             deleted_resources.append(f"users({deleted_users})")
 
-        # 3. Hard delete TenantConfig
-        tenant.delete()
-        deleted_resources.append("db")
+        # 3. Soft delete TenantConfig (keeps record to suppress YAML fallback)
+        tenant.is_active = False
+        tenant.hosters = []
+        tenant.save()
+        deleted_resources.append("db(deactivated)")
         logger.info(f"Deleted tenant: {tenant_id} — cleaned: {', '.join(deleted_resources)}")
 
         return JsonResponse({
