@@ -19,7 +19,7 @@ function linkify(text) {
           href={part}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 underline break-all"
+          className="text-[var(--tenant-primary)] underline break-all"
         >
           {label}
         </a>
@@ -64,14 +64,14 @@ export default function ChatMessages({ messages, policyHit, isStreaming, onConfi
             <div
               className={`text-sm ${
                 msg.sender === "user"
-                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                  ? "bg-[var(--tenant-primary)] text-white"
                   : "bg-white text-gray-900 border border-gray-200"
               } p-3 rounded-lg shadow-sm`}
             >
               {msg.type === "chart" ? (
                 <div>
                   <div className="whitespace-pre-wrap">{msg.text}</div>
-                  <div id={`chart-${msg.id}`} className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200 overflow-auto" style={{ maxWidth: 400 }}>
+                  <div id={`chart-${msg.id}`} className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200 overflow-auto" style={{ maxWidth: 400 }}>
                     <div style={{ minWidth: 500 }}>
                       <SimpleChart chartData={msg.chartData} />
                     </div>
@@ -115,7 +115,7 @@ export default function ChatMessages({ messages, policyHit, isStreaming, onConfi
               {msg.sender === "ai" && (
                 <button
                   onClick={() => handleCopy(msg.text, i)}
-                  className="ml-2 px-2 py-0.5 text-xs text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                  className="ml-2 px-2 py-0.5 text-xs text-gray-500 hover:text-[var(--tenant-primary)] hover:bg-gray-50 rounded transition-colors"
                   title={t("aiSecretary.copyMessage")}
                 >
                   {copiedId === i ? t("aiSecretary.copied") : t("aiSecretary.copy")}
@@ -131,7 +131,7 @@ export default function ChatMessages({ messages, policyHit, isStreaming, onConfi
           <img src={AI} alt="AI" className="w-8 h-8 rounded-full mr-2 flex-shrink-0" />
           <div className="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
             <div className="flex items-center space-x-1">
-              <div className="w-2 h-2 rounded-full animate-bounce bg-blue-500"></div>
+              <div className="w-2 h-2 rounded-full animate-bounce bg-[var(--tenant-primary)]"></div>
               <div className="w-2 h-2 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
               <div className="w-2 h-2 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
             </div>

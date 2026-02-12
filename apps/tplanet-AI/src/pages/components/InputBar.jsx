@@ -55,7 +55,7 @@ export default function InputBar({
           onKeyDown={handleKeyPress}
           placeholder={disabled ? t("aiSecretary.waitforResponse") : t("aiSecretary.input")}
           disabled={disabled}  // 🔥 禁用輸入框
-          className={`flex-1 resize-none border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          className={`flex-1 resize-none border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--tenant-primary)] ${
             disabled ? "bg-gray-100 cursor-not-allowed" : ""
           }`}
           rows={1}
@@ -75,7 +75,7 @@ export default function InputBar({
             className={`px-4 py-2 rounded-lg ${
               disabled || isLoading || !input.trim()
                 ? "bg-gray-300 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-600"
+                : "bg-[var(--tenant-primary)] hover:opacity-90"
             } text-white`}
           >
             {isLoading ? t("aiSecretary.sending") : t("aiSecretary.send")}

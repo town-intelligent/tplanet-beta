@@ -86,7 +86,7 @@ export default function DropzonePane({ ensureSession, onUploadStart, onUploaded,
 
   return (
     <div className="text-left">
-      <p className="text-lg font-semibold text-[#317EE0] mb-3">上傳檔案</p>
+      <p className="text-lg font-semibold text-[var(--tenant-primary)] mb-3">上傳檔案</p>
       <div {...getRootProps()} className={`flex flex-col items-center justify-center py-8 border-2 border-dashed rounded-xl bg-white w-[300px] transition-colors ${busy ? "opacity-60 cursor-wait" : "hover:bg-gray-50 cursor-pointer"}`}>
         <input {...getInputProps()} disabled={busy} />
         <img src={Upload} alt="上傳檔案" className="w-10 h-10 mb-2" />
@@ -98,7 +98,7 @@ export default function DropzonePane({ ensureSession, onUploadStart, onUploaded,
         <a
           href="/docx-template.docx"
           download="南投縣計畫數位管理系統計畫檔案格式.docx"
-          className="text-[#317EE0] hover:underline"
+          className="text-[var(--tenant-primary)] hover:underline"
         >
           📥 下載 DOCX 範本
         </a>

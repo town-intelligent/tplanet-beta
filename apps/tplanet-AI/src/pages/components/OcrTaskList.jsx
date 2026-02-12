@@ -52,7 +52,7 @@ export default function OcrTaskList({ tasks, onStartPrefill, onCancel, listRef }
               <>
                 <div className="mt-2 h-2 w-full bg-gray-200 rounded overflow-hidden">
                   <div
-                    className="h-full bg-blue-500 transition-all duration-500"
+                    className="h-full bg-[var(--tenant-primary)] transition-all duration-500"
                     style={{ width: `${pct}%` }}
                   />
                 </div>
@@ -76,7 +76,7 @@ export default function OcrTaskList({ tasks, onStartPrefill, onCancel, listRef }
                         href={t.cmsLink}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-3 py-1.5 rounded bg-blue-500 text-white text-xs hover:bg-blue-600"
+                        className="px-3 py-1.5 rounded bg-[var(--tenant-primary)] text-white text-xs hover:opacity-90"
                       >
                         開啟專案
                       </a>
