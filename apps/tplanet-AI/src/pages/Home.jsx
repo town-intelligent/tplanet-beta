@@ -45,7 +45,7 @@ const Home = () => {
     return (
       <section className="flex-grow mt-5">
         <div className="flex flex-col items-center justify-center py-40">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-[var(--tenant-primary)] border-t-transparent mb-4"></div>
           <p className="text-gray-600">載入中...</p>
         </div>
       </section>

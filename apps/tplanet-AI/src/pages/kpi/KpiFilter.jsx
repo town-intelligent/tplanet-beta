@@ -66,7 +66,7 @@ const generateProjectBlock = (project) => {
         </Link>
         <Card.Body>
           <Link to={`/content/${project.uuid}`} className="!no-underline text-black">
-            <p className="text-xl text-[#3E6896] font-bold">{project.name || ""}</p>
+            <p className="text-xl text-[var(--tenant-primary)] font-bold">{project.name || ""}</p>
             <p>永續企業: {project.project_a || ""}</p>
             <p>地方團隊: {project.project_b || "（未標示）"}</p>
             <p>

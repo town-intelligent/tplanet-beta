@@ -135,7 +135,7 @@ const KPI = () => {
       {/* 計畫卡片預覽（最多 3 張，其他續下頁，每頁至多 9 張)*/}
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-[var(--tenant-primary)] border-t-transparent mb-4"></div>
           <p className="text-gray-600">載入專案中...</p>
         </div>
       ) : (

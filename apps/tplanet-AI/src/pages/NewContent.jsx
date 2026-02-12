@@ -183,10 +183,10 @@ function NewsContent() {
       {/* 右側：內文區 */}
       <div className="w-full md:w-1/2">
         <div id="title">
-          <Tr className="text-[#3E6896] text-3xl md:text-4xl font-bold" children={title} />
+          <Tr className="text-[var(--tenant-primary)] text-3xl md:text-4xl font-bold" children={title} />
         </div>
         {period && (
-          <p id="period" className="text-[#3E6896] text-2xl md:text-3xl font-semibold mt-1">
+          <p id="period" className="text-[var(--tenant-primary)] text-2xl md:text-3xl font-semibold mt-1">
             {period}
           </p>
         )}
@@ -203,7 +203,7 @@ function NewsContent() {
               download
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full bg-[#3E6896] text-white rounded-md px-6 py-4 hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3E6896]"
+              className="block w-full bg-[var(--tenant-primary)] text-white rounded-md px-6 py-4 hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--tenant-primary)]"
             >
               <div className="flex items-center justify-center gap-3">
                 {/* 小相機/附件圖示（inline SVG，避免額外依賴） */}
@@ -229,13 +229,13 @@ function NewsContent() {
               <div className="mt-2 flex items-center justify-end gap-4 text-sm">
                 <button
                   onClick={() => setShowAttach(true)}
-                  className="text-[#3E6896] hover:underline"
+                  className="text-[var(--tenant-primary)] hover:underline"
                 >
                   查看全部
                 </button>
                 <button
                   onClick={openAllAttachments}
-                  className="text-[#3E6896] hover:underline"
+                  className="text-[var(--tenant-primary)] hover:underline"
                   title="在新分頁開啟全部附件"
                 >
                   全部開啟
@@ -277,7 +277,7 @@ function NewsContent() {
                       download
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="shrink-0 px-3 py-1 rounded bg-[#3E6896] text-white hover:opacity-90"
+                      className="shrink-0 px-3 py-1 rounded bg-[var(--tenant-primary)] text-white hover:opacity-90"
                     >
                       下載
                     </a>

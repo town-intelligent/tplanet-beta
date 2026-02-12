@@ -109,7 +109,7 @@ const SdgsWeight = ({ data }) => {
                 html={value}
               />
               <button
-                className="read-more text-blue-500 text-xs underline hidden"
+                className="read-more text-[var(--tenant-primary)] text-xs underline hidden"
                 onClick={() => handleReadMore(title, value)}
               >
                 Read more...
@@ -135,7 +135,7 @@ const SdgsWeight = ({ data }) => {
               dangerouslySetInnerHTML={{ __html: modalContent.body }}
             ></div>
             <button
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
+              className="mt-4 px-4 py-2 bg-[var(--tenant-primary)] text-white rounded-lg"
               onClick={() => setModalContent({ title: "", body: "" })}
             >
               Close

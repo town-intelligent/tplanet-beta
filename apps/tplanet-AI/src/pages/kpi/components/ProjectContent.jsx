@@ -283,7 +283,7 @@ export default function ProjectContent() {
             />
             <div className="row mt-4 pb-4 border-b border-[#D9D9D9]">
               <div className="col-md-6">
-                <h4 className="!text-[#3E6896]" id="project_name">
+                <h4 className="!text-[var(--tenant-primary)]" id="project_name">
                   {project.name}
                 </h4>
               </div>
@@ -324,7 +324,7 @@ export default function ProjectContent() {
                   >
                     <p className="flex">
                       <img className="mr-2 w-5" src={PDF} alt="" />
-                      <span id="file" className="text-[#3E6896] font-semibold">
+                      <span id="file" className="text-[var(--tenant-primary)] font-semibold">
                         {isDownloading ? t("project.downloading") : attachmentName}
                       </span>
                     </p>
@@ -339,7 +339,7 @@ export default function ProjectContent() {
                   >
                     <p className="flex">
                       <img className="mr-2 w-5" src={PDF} alt="" />
-                      <span id="file" className="text-[#3E6896] font-semibold">
+                      <span id="file" className="text-[var(--tenant-primary)] font-semibold">
                         {isDownloading ? t("project.downloading") : attachmentName}
                       </span>
                     </p>
@@ -407,11 +407,11 @@ export default function ProjectContent() {
                   <p className=" text-black mb-2">
                     {t("project.projectBudget")}<span className="text-sm">{t("project.budgetUnit")}</span>
                   </p>
-                  <div className="w-11/12 border-b border-[#317EE0]"></div>
+                  <div className="w-11/12 border-b border-[var(--tenant-primary)]"></div>
                 </div>
 
                 <p
-                  className="flex items-end font-bold text-[#3E6896] rozha-one-regular"
+                  className="flex items-end font-bold text-[var(--tenant-primary)] rozha-one-regular"
                   id="budget"
                 >
                   <span className="text-2xl mr-1">NTD</span>
@@ -429,7 +429,7 @@ export default function ProjectContent() {
                   type="button"
                   className={`pb-3 text-lg font-semibold ${
                     activeTab === "成果展現"
-                      ? "text-[#3E6896] border-b-2 border-[#3E6896]"
+                      ? "text-[var(--tenant-primary)] border-b-2 border-[var(--tenant-primary)]"
                       : "text-[#6B7280]"
                   }`}
                   onClick={() => setActiveTab("成果展現")}
@@ -442,7 +442,7 @@ export default function ProjectContent() {
                   type="button"
                   className={`pb-3 text-lg font-semibold ${
                     activeTab === "SROI"
-                      ? "text-[#3E6896] border-b-2 border-[#3E6896]"
+                      ? "text-[var(--tenant-primary)] border-b-2 border-[var(--tenant-primary)]"
                       : "text-[#6B7280]"
                   }`}
                   onClick={() => setActiveTab("SROI")}
@@ -484,7 +484,7 @@ export default function ProjectContent() {
                         <div className="col-12 mb-2">
                           <div className="row mt-3">
                             <div className="col-md-6">
-                              <p className="text-[#3E6896] text-xl font-bold">
+                              <p className="text-[var(--tenant-primary)] text-xl font-bold">
                                 {t("project.taskName")}: {task.name}
                               </p>
                             </div>
