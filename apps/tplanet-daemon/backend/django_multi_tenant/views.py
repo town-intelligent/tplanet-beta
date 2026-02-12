@@ -272,6 +272,8 @@ def tenant_list(request: HttpRequest) -> JsonResponse:
         loader.load_from_file(config_path)
 
         for tenant_id, yaml_cfg in loader.tenants.items():
+            if tenant_id == "default":
+                continue  # system fallback, not manageable
             if tenant_id not in all_db_ids:
                 result.append({
                     "tenantId": tenant_id,
