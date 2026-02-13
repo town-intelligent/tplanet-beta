@@ -9,7 +9,7 @@ services:
     ports: !override
       - "6177:5170"
     environment:
-      - VITE_HOST_URL_TPLANET=https://stable.4impact.cc
+      - VITE_HOST_URL_TPLANET=
       - VITE_API_LLMTWINS=https://stable.4impact.cc
 
   backend:
