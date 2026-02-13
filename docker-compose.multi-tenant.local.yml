@@ -1,37 +1,56 @@
-# Local deploy override:
-# 1. Reset bind mounts (not accessible from Docker daemon in this environment)
-# 2. Use Dockerfile.multi-tenant for backend (Python 3.11 compatibility)
-# 3. Install gunicorn at runtime for production backend
-# 4. Remap db/db-nantou ports to avoid conflicts with stable env
+# Dev environment local override
+# Container names: mt-dev-*
+# Ports: same as previous multi-tenant stack
 services:
   frontend:
+    container_name: mt-dev-frontend
     volumes: !reset []
     command: sh -c "npm run build && npx vite preview --host 0.0.0.0 --port 5170"
+    ports: !override
+      - "6176:5170"
+    environment:
+      - VITE_HOST_URL_TPLANET=https://dev.4impact.cc
+      - VITE_API_LLMTWINS=https://dev.4impact.cc
 
   backend:
+    container_name: mt-dev-backend
     build:
       context: ./apps/tplanet-daemon
       dockerfile: Dockerfile.multi-tenant
     volumes:
-      - /var/www/multi-tenant-static/news:/server/backend/static/news
-      - /var/www/multi-tenant-static/uploads:/server/backend/static/uploads
+      - /var/www/mt-dev-static/news:/server/backend/static/news
+      - /var/www/mt-dev-static/uploads:/server/backend/static/uploads
     command: sh -c "pip install gunicorn && cd /server/backend && python manage.py migrate --noinput && gunicorn backend.wsgi:application --bind 0.0.0.0:5567"
+    ports: !override
+      - "5580:5567"
 
   db:
+    container_name: mt-dev-db
     ports: !override
       - "5439:5432"
 
   db-nantou:
+    container_name: mt-dev-db-nantou
     ports: !override
       - "5440:5432"
     volumes: !reset
       - db_nantou_data:/var/lib/postgresql/data
 
+  ollama:
+    container_name: mt-dev-ollama
+
+  ollama-gateway:
+    container_name: mt-dev-ollama-gw
+    ports: !override
+      - "8182:8082"
+
   llmtwins:
+    container_name: mt-dev-llmtwins
     ports: !override
       - "8012:8002"
     volumes: !reset []
 
   llmtwins-wrapper:
+    container_name: mt-dev-llmtwins-wrapper
     ports: !override
       - "8014:8001"
