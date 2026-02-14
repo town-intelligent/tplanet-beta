@@ -419,6 +419,13 @@ def tenant_detail(request: HttpRequest, tenant_id: str) -> JsonResponse:
     """
     from django_multi_tenant.models import TenantConfig
 
+    # Protect system tenants
+    if request.method == "DELETE" and tenant_id in {"default", "multi-tenant"}:
+        return JsonResponse(
+            {"error": f"Tenant '{tenant_id}' is a protected system tenant and cannot be deleted"},
+            status=400,
+        )
+
     # Prevent deleting the tenant you're currently on
     if request.method == "DELETE":
         current_tenant = get_current_tenant()
@@ -496,7 +503,6 @@ def tenant_detail(request: HttpRequest, tenant_id: str) -> JsonResponse:
         })
 
     elif request.method == "DELETE":
-        from django.contrib.auth.models import User
         from django_multi_tenant import cloudflare
 
         deleted_resources = []
@@ -507,19 +513,10 @@ def tenant_detail(request: HttpRequest, tenant_id: str) -> JsonResponse:
             deleted_resources.append("dns")
         logger.info(f"[{tenant_id}] DNS cleanup: {dns_result.get('message', '')}")
 
-        # 2. Delete all hoster users (Django User + AccountProfile cascade)
-        hosters = tenant.hosters or []
-        deleted_users = 0
-        for email in hosters:
-            try:
-                user = User.objects.filter(email=email).first()
-                if user:
-                    user.delete()  # AccountProfile cascades
-                    deleted_users += 1
-            except Exception as e:
-                logger.warning(f"[{tenant_id}] Failed to delete user {email}: {e}")
-        if deleted_users:
-            deleted_resources.append(f"users({deleted_users})")
+        # 2. Keep global user accounts; only detach tenant hosters mapping.
+        # Users can belong to other tenants and should not be deleted here.
+        if tenant.hosters:
+            deleted_resources.append("hosters(detached)")
 
         # 3. Soft delete TenantConfig (keeps record to suppress YAML fallback)
         tenant.is_active = False

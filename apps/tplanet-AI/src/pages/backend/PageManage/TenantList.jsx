@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const PROTECTED_TENANTS = new Set(["default", "multi-tenant"]);
+
 const TenantList = () => {
   const [tenants, setTenants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,6 +30,10 @@ const TenantList = () => {
   };
 
   const handleDelete = async (tenantId) => {
+    if (PROTECTED_TENANTS.has(tenantId)) {
+      alert(`站台 "${tenantId}" 為系統保留站台，無法刪除`);
+      return;
+    }
     if (!confirm(`確定要刪除站台 "${tenantId}" 嗎？`)) return;
 
     try {
@@ -38,7 +44,8 @@ const TenantList = () => {
       if (response.ok) {
         loadTenants();
       } else {
-        alert("刪除失敗");
+        const result = await response.json().catch(() => ({}));
+        alert(result.error || "刪除失敗");
       }
     } catch (e) {
       alert("刪除失敗: " + e.message);
@@ -132,7 +139,17 @@ const TenantList = () => {
                   </button>
                   <button
                     onClick={() => handleDelete(tenant.tenantId)}
-                    className="px-3 py-1 border border-red-600 text-red-600 rounded hover:bg-red-50"
+                    disabled={PROTECTED_TENANTS.has(tenant.tenantId)}
+                    title={
+                      PROTECTED_TENANTS.has(tenant.tenantId)
+                        ? "系統保留站台不可刪除"
+                        : ""
+                    }
+                    className={`px-3 py-1 border rounded ${
+                      PROTECTED_TENANTS.has(tenant.tenantId)
+                        ? "border-gray-300 text-gray-400 cursor-not-allowed bg-gray-50"
+                        : "border-red-600 text-red-600 hover:bg-red-50"
+                    }`}
                   >
                     刪除
                   </button>

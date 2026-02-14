@@ -459,11 +459,11 @@ const AccountList = () => {
       const list = Array.isArray(response.data?.users) ? response.data.users : [];
       const baseItems = list.map(normalize);
 
-      // 只顯示 hosters index[1:]（排除 index 0 系統管理者）
-      const hosterEmails = allHosters.slice(1).map((e) => e.toLowerCase());
+      // 只顯示當前 tenant 的 hosters（含 index 0 站長），避免誤顯示全站帳號
+      const hosterEmails = allHosters.map((e) => e.toLowerCase());
       const memberItems = hosterEmails.length > 0
         ? baseItems.filter((acc) => hosterEmails.includes(acc.email.toLowerCase()))
-        : baseItems;
+        : [];
 
       // 逐一用 get_user_info 查 active，補上 status = 啟用 / 停用
       const itemsWithStatus = await Promise.all(
