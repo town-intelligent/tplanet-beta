@@ -39,7 +39,11 @@ const CmsSdgsSetting = () => {
       if (allZeros) {
         try {
           const result = await sdgsAutoGen(id);
-          const parsedResult = JSON.parse(result.content);
+          // Backend may return content as stringified JSON or as an object already.
+          let parsedResult = result?.content;
+          if (typeof parsedResult === "string") {
+            parsedResult = JSON.parse(parsedResult);
+          }
 
           if (parsedResult.project_sdgs?.length > 0) {
             const projectSDGs = parsedResult.project_sdgs[0];
