@@ -39,8 +39,15 @@ const CmsSdgsSetting = () => {
       if (allZeros) {
         try {
           const result = await sdgsAutoGen(id);
-          // Backend may return content as stringified JSON or as an object already.
-          let parsedResult = result?.content;
+          // Backend may wrap payloads differently depending on deployment.
+          // Normalize to an object like: { project_sdgs: [...] }.
+          let parsedResult = result;
+          if (parsedResult && typeof parsedResult === "object" && parsedResult.data) {
+            parsedResult = parsedResult.data;
+          }
+          if (parsedResult && typeof parsedResult === "object" && parsedResult.content !== undefined) {
+            parsedResult = parsedResult.content;
+          }
           if (typeof parsedResult === "string") {
             parsedResult = JSON.parse(parsedResult);
           }
