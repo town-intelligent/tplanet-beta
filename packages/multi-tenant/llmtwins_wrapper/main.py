@@ -128,10 +128,11 @@ async def proxy_request(
     if isinstance(body, dict):
         is_streaming = body.get("stream", False)
 
-    async with httpx.AsyncClient(timeout=config.upstream_timeout) as client:
-        if is_streaming:
-            # Streaming response
-            async def stream_generator():
+    if is_streaming:
+        # Important: the StreamingResponse iterator runs after this function returns.
+        # Don't use an httpx client context manager that would close before iteration.
+        async def stream_generator():
+            async with httpx.AsyncClient(timeout=config.upstream_timeout) as client:
                 async with client.stream(
                     request.method,
                     upstream_url,
@@ -141,40 +142,31 @@ async def proxy_request(
                     headers=headers,
                 ) as response:
                     async for chunk in response.aiter_bytes():
-                        # Optionally rewrite session_id in response chunks
                         if rewrite_response:
                             chunk = rewrite_response_session(chunk, tenant)
                         yield chunk
 
-            return StreamingResponse(
-                stream_generator(),
-                media_type="application/x-ndjson",
-            )
-        else:
-            # Non-streaming response
-            response = await client.request(
-                request.method,
-                upstream_url,
-                params=query_params,
-                json=body if isinstance(body, dict) else None,
-                content=body if isinstance(body, bytes) else None,
-                headers=headers,
-            )
+        return StreamingResponse(stream_generator(), media_type="application/x-ndjson")
 
-            # Parse and optionally rewrite response
-            try:
-                resp_data = response.json()
-                if rewrite_response and isinstance(resp_data, dict):
-                    resp_data = rewrite_response_data(resp_data, tenant)
-                return JSONResponse(
-                    content=resp_data,
-                    status_code=response.status_code,
-                )
-            except json.JSONDecodeError:
-                return JSONResponse(
-                    content=response.text,
-                    status_code=response.status_code,
-                )
+    # Non-streaming response
+    async with httpx.AsyncClient(timeout=config.upstream_timeout) as client:
+        response = await client.request(
+            request.method,
+            upstream_url,
+            params=query_params,
+            json=body if isinstance(body, dict) else None,
+            content=body if isinstance(body, bytes) else None,
+            headers=headers,
+        )
+
+    # Parse and optionally rewrite response
+    try:
+        resp_data = response.json()
+        if rewrite_response and isinstance(resp_data, dict):
+            resp_data = rewrite_response_data(resp_data, tenant)
+        return JSONResponse(content=resp_data, status_code=response.status_code)
+    except json.JSONDecodeError:
+        return JSONResponse(content=response.text, status_code=response.status_code)
 
 
 def rewrite_response_session(chunk: bytes, tenant: str) -> bytes:

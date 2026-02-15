@@ -72,6 +72,8 @@ services:
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - DEFAULT_MODEL=${OLLAMA_MODEL:-qwen2:7b-instruct}
+      # Allow routing "openai/*" models through the gateway when configured
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:8082/health || exit 1"]
@@ -91,6 +93,8 @@ services:
       - ./apps/LLMTwins:/app
     environment:
       - OLLAMA_BASE_URL=http://ollama-gateway:8082
+      # Required for models like "openai/gpt-4o-mini" (used by the AI secretary UI)
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
     depends_on:
       - ollama-gateway
     networks:
