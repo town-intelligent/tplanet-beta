@@ -57,18 +57,6 @@ class TenantMiddleware:
 
     def _resolve_tenant(self, request: HttpRequest) -> Optional[TenantInfo]:
         """Resolve tenant from request (header → domain → subdomain → DB → default)."""
-        # Check header
-        header_key = f"HTTP_{self.header_name.upper().replace('-', '_')}"
-        tenant_id = request.META.get(header_key)
-        if tenant_id:
-            # YAML first
-            if tenant_id in self.config_loader.tenants:
-                return self._create_tenant_info(tenant_id)
-            # DB-only tenants (created via SiteWizard)
-            db_tenant = self._resolve_db_tenant(tenant_id)
-            if db_tenant:
-                return db_tenant
-
         host = request.get_host().split(":")[0].lower()
 
         # If routed through the Cloudflare Worker, we may be hitting an origin hostname
@@ -80,6 +68,25 @@ class TenantMiddleware:
             original_host = original_host.split(":")[0].lower()
             if host.endswith(".4impact.cc") and original_host.endswith(".sechome.cc"):
                 host = original_host
+
+        # Header tenant id (can be injected by proxies). For tenant sites under `*.sechome.cc`,
+        # ignore a mismatched header and prefer hostname/subdomain resolution.
+        header_key = f"HTTP_{self.header_name.upper().replace('-', '_')}"
+        tenant_id = request.META.get(header_key)
+        if tenant_id:
+            tenant_id = str(tenant_id).strip().lower()
+            subdomain_hint = host.split(".")[0]
+            if host.endswith(".sechome.cc") and tenant_id != subdomain_hint:
+                tenant_id = None
+
+        if tenant_id:
+            # YAML first
+            if tenant_id in self.config_loader.tenants:
+                return self._create_tenant_info(tenant_id)
+            # DB-only tenants (created via SiteWizard)
+            db_tenant = self._resolve_db_tenant(tenant_id)
+            if db_tenant:
+                return db_tenant
 
         # Check full domain match
         if host in self.domain_to_tenant:
