@@ -34,7 +34,12 @@ const CmsSdgsSetting = () => {
         ? projectInfo.weight.split(",")
         : Array(27).fill("0");
 
-      const allZeros = sdgsList.every((value) => value === "0");
+      // Some backends store weight values with whitespace or non-string types.
+      // Treat empty/NaN as 0 so we still trigger AI auto-gen for truly-empty weights.
+      const allZeros = sdgsList.every((value) => {
+        const n = parseInt(String(value ?? "").trim(), 10);
+        return !Number.isFinite(n) || n === 0;
+      });
 
       if (allZeros) {
         try {
@@ -77,7 +82,10 @@ const CmsSdgsSetting = () => {
           return {
             title: category.title,
             id: uniqueId,
-            isChecked: parseInt(sdgsList[uniqueId.split("_")[1] - 1]) !== 0,
+            isChecked: (() => {
+              const n = parseInt(String(sdgsList[uniqueId.split("_")[1] - 1] ?? "").trim(), 10);
+              return Number.isFinite(n) && n !== 0;
+            })(),
           };
         });
 
