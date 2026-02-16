@@ -26,6 +26,7 @@ services:
     environment:
       - TPLANET_ENV=stable
       - TPLANET_BACKEND_NAME=mt-stable-backend
+      - LLMTWINS_WRAPPER_URL=http://llmtwins-wrapper:8001
       - CLOUDFLARE_ZONE_ID=${CLOUDFLARE_ZONE_ID}
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
       - CLOUDFLARE_DOMAIN=${CLOUDFLARE_DOMAIN:-sechome.cc}

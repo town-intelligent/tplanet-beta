@@ -18,6 +18,7 @@ services:
       - "5580:5567"
     environment:
       - DJANGO_SETTINGS_MODULE=backend.settings_multitenant
+      - LLMTWINS_WRAPPER_URL=http://llmtwins-wrapper:8001
       - DEBUG=${DEBUG:-False}
       - DB_NAME=${DB_NAME:-tplanet}
       - DB_HOST=${DB_HOST:-db}
