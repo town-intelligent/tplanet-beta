@@ -92,19 +92,61 @@ export async function list_plans(email) {
     (typeof window !== "undefined" ? window.location.origin : "")
   ).replace(/\/+$/, "");
 
-  const url = `${base}/api/projects/projects`;
   const body = new URLSearchParams({ email });
+  const primaryUrl = `${base}/api/projects/projects`;
+  const fallbackUrl = `${base}/projects/projects`;
 
-  const res = await fetch(url, {
+  const primaryRes = await fetch(primaryUrl, {
     method: "POST",
     body,
     credentials: "omit",
   });
 
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-  // API 回傳格式: {success: true, data: {...}} 或直接 {...}
-  return data?.data || data;
+  if (primaryRes.ok) {
+    const data = await primaryRes.json();
+    return data?.data || data;
+  }
+
+  // Tenant hosters may include emails that don't have an account in this env yet.
+  // Treat account-not-found as an empty project list instead of hard error.
+  if (primaryRes.status === 404) {
+    const contentType = (primaryRes.headers.get("content-type") || "").toLowerCase();
+    if (contentType.includes("application/json")) {
+      try {
+        const errData = await primaryRes.json();
+        const errCode = String(errData?.error?.code || errData?.code || "").toUpperCase();
+        const errMsg = String(errData?.error?.message || errData?.message || "").toLowerCase();
+        if (errCode === "ACCOUNT_NOT_FOUND" || errMsg.includes("account not found")) {
+          return { result: "true", projects: [] };
+        }
+      } catch (_) {
+        // ignore parse failure and continue with route-level fallback logic below
+      }
+    }
+  }
+
+  // Important: this endpoint can legitimately return 404 JSON (e.g. account not found).
+  // Only fallback when it looks like route-level 404 (usually HTML/non-JSON from proxy).
+  if (primaryRes.status === 404) {
+    const contentType = (primaryRes.headers.get("content-type") || "").toLowerCase();
+    const primaryBodyText = await primaryRes.text();
+    const isJsonLike = contentType.includes("application/json") || primaryBodyText.trim().startsWith("{");
+
+    if (!isJsonLike) {
+      const fallbackRes = await fetch(fallbackUrl, {
+        method: "POST",
+        body,
+        credentials: "omit",
+      });
+      if (fallbackRes.ok) {
+        const data = await fallbackRes.json();
+        return data?.data || data;
+      }
+      throw new Error(`HTTP ${fallbackRes.status || 500}`);
+    }
+  }
+
+  throw new Error(`HTTP ${primaryRes.status || 500}`);
 }
 
 

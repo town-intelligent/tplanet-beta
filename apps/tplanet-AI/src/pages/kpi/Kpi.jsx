@@ -45,14 +45,28 @@ const KPI = () => {
       } else {
         // 跨區跨域：顯示所有人的專案
         hosters = SITE_HOSTERS.length > 1 ? SITE_HOSTERS.slice(1) : SITE_HOSTERS;
+        // 非 personal mode 仍保留目前登入者，避免 hosters 設定失準時整頁無資料
+        if (email) hosters = [...hosters, email];
       }
+      hosters = [...new Set((hosters || []).map((h) => (h || "").trim()).filter(Boolean))];
       const allProjects = [];
       const projectYears = new Set();
+      let mergedProjectList = [];
 
       for (const hoster of hosters) {
-        const objListProjects2 = await list_plans(hoster);
+        let objListProjects2 = null;
+        try {
+          objListProjects2 = await list_plans(hoster);
+        } catch (err) {
+          console.warn(`[KPI] list_plans failed for ${hoster}:`, err);
+          continue;
+        }
+
         const projectUuids = objListProjects2?.projects || [];
-        setObjListProjects(objListProjects2);
+        if (Array.isArray(projectUuids)) {
+          mergedProjectList = Array.from(new Set([...mergedProjectList, ...projectUuids]));
+          setObjListProjects({ result: "true", projects: mergedProjectList });
+        }
         for (const uuid of projectUuids) {
           const projectInfo = await plan_info(uuid);
           allProjects.push({ uuid, ...projectInfo });

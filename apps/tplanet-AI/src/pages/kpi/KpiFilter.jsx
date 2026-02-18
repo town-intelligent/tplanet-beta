@@ -120,12 +120,21 @@ const KpiFilter = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const hosters = siteHosters.length > 1 ? siteHosters.slice(1) : siteHosters;
+        const currentEmail = (localStorage.getItem("email") || "").trim();
+        let hosters = siteHosters.length > 1 ? siteHosters.slice(1) : siteHosters;
+        if (currentEmail) hosters = [...hosters, currentEmail];
+        hosters = [...new Set((hosters || []).map((h) => (h || "").trim()).filter(Boolean))];
 
         // 1) 收集所有 uuid
         const uuidSet = new Set();
         for (const email of hosters) {
-          const listResp = await list_plans(email);
+          let listResp = null;
+          try {
+            listResp = await list_plans(email);
+          } catch (err) {
+            console.warn(`[KpiFilter] list_plans failed for ${email}:`, err);
+            continue;
+          }
           const projects = listResp?.projects || [];
           if (Array.isArray(projects)) {
             projects.forEach((u) => uuidSet.add(u));
